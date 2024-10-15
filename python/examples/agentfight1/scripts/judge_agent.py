@@ -4,6 +4,7 @@ import pyarrow as pa
 from mofa.kernel.utils.util import load_agent_config, create_agent_output
 from mofa.run.run_agent import run_dspy_or_crewai_agent
 from mofa.utils.log.agent import record_agent_result_log
+from mofa.utils.files.dir import get_relative_path
 
 class Operator:
     def __init__(self):
@@ -24,8 +25,8 @@ class Operator:
                 #print('Received Task:', self.task) 
 
             if self.answer_1 and self.answer_2 and self.task:
-                yaml_file_path = yaml_file_path = '/home/mofaDora/mofa/python/examples/agentfight1/configs/judge_agent.yml'
-
+                #yaml_file_path = '/home/mofaDora/zymmofa/mofa/python/examples/agentfight1/configs/judge_agent.yml'
+                yaml_file_path =get_relative_path(current_file=__file__, sibling_directory_name='configs', target_file_name='judge_agent.yml')
                 inputs = load_agent_config(yaml_file_path)
                 # inputs["task"] = self.task
                 # inputs["answer_1"] = self.answer_1
@@ -42,9 +43,9 @@ class Operator:
                 send_output("evaluation_result", pa.array([create_agent_output(step_name='evaluation_result', output_data=agent_result, dataflow_status=os.getenv('IS_DATAFLOW_END', True))]), dora_event['metadata'])
                 #print('3')
 
-                print('Received Answer 1:', self.answer_1)
-                print('Received Answer 2:', self.answer_2)
-                print('Evaluation Result:', agent_result)
+                #print('Received Answer 1:', self.answer_1)
+                #print('Received Answer 2:', self.answer_2)
+                #print('Evaluation Result:', agent_result)
 
                 self.answer_1 = None
                 self.answer_2 = None
